@@ -12,6 +12,7 @@ services:
       - --providers.swarm.network=public
       - --providers.swarm.refreshSeconds=30
       - --providers.swarm.httpClientTimeout=300
+      - --providers.swarm.exposedByDefault=false
       - --providers.swarm.watch=true
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
