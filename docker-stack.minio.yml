@@ -1,0 +1,97 @@
+version: '3.9'
+
+x-minio-common: &minio-common
+  image: minio/minio:RELEASE.2024-06-13T22-53-53Z
+  env_file:
+    - .env
+  command: server http://minio{1...3}/export --console-address 0.0.0.0:9001
+  networks:
+    - public
+  healthcheck:
+    test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+    interval: 30s
+    timeout: 20s
+    retries: 3
+
+x-traefik-labels: &traefik-labels
+  labels:
+    - traefik.enable=true
+    - traefik.http.middlewares.redirect-https.redirectScheme.scheme=https
+    - traefik.http.middlewares.redirect-https.redirectScheme.permanent=true
+    - traefik.http.routers.minio-https.rule=Host(`minio.$DOMAIN`)
+    - traefik.http.routers.minio-https.entrypoints=websecure
+    - traefik.http.routers.minio-https.service=minio
+    - traefik.http.routers.minio-http.rule=Host(`minio.$DOMAIN`)
+    - traefik.http.routers.minio-http.entrypoints=web
+    - traefik.http.routers.minio-http.middlewares=redirect-https
+    - traefik.http.routers.minio-http.service=minio
+    - traefik.http.services.minio.loadbalancer.server.port=9000
+    - traefik.http.routers.minio-console-https.rule=Host(`minio-console.$DOMAIN`)
+    - traefik.http.routers.minio-console-https.entrypoints=websecure
+    - traefik.http.routers.minio-console-https.service=minio-console
+    - traefik.http.routers.minio-console-http.rule=Host(`minio-console.$DOMAIN`)
+    - traefik.http.routers.minio-console-http.entrypoints=web
+    - traefik.http.routers.minio-console-http.middlewares=redirect-https
+    - traefik.http.routers.minio-console-http.service=minio-console
+    - traefik.http.services.minio-console.loadbalancer.server.port=9001
+
+services:
+  minio1:
+    <<: *minio-common
+    hostname: minio1
+    volumes:
+      - minio1-data:/export
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 5
+        window: 60s
+      placement:
+        constraints:
+          - node.labels.minio==1
+    labels:
+      <<: *traefik-labels
+
+  minio2:
+    <<: *minio-common
+    hostname: minio2
+    volumes:
+      - minio2-data:/export
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 5
+        window: 60s
+      placement:
+        constraints:
+          - node.labels.minio==2
+    labels:
+      <<: *traefik-labels
+
+  minio3:
+    <<: *minio-common
+    hostname: minio3
+    volumes:
+      - minio3-data:/export
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 5
+        window: 60s
+      placement:
+        constraints:
+          - node.labels.minio==3
+    labels:
+      <<: *traefik-labels
+
+volumes:
+  minio1-data:
+    driver: local
+  minio2-data:
+    driver: local
+  minio3-data:
+    driver: local
+
+networks:
+  public:
+    external: true
