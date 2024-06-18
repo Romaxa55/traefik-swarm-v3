@@ -49,7 +49,6 @@ services:
       placement:
         constraints:
           - node.labels.minio==1
-    labels:
       <<: *traefik-labels
 
   minio2:
@@ -65,7 +64,6 @@ services:
       placement:
         constraints:
           - node.labels.minio==2
-    labels:
       <<: *traefik-labels
 
   minio3:
@@ -81,7 +79,6 @@ services:
       placement:
         constraints:
           - node.labels.minio==3
-    labels:
       <<: *traefik-labels
 
 volumes:
