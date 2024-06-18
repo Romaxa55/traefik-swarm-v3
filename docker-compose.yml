@@ -48,4 +48,3 @@ networks:
 volumes:
   letsencrypt:
     driver: glusterfs
-    name: "g0/letsencrypt"
