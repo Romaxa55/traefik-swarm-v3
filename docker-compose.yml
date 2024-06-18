@@ -5,6 +5,8 @@ services:
     image: traefik:v3.0.3
     environment:
       CF_DNS_API_TOKEN: $CF_DNS_API_TOKEN
+    env_file:
+      - .env
     command:
       - --log=true
       - --log.level=INFO
