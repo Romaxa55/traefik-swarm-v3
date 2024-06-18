@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  traefik:
+    image: traefik:v3.0.3
+    environment:
+      CF_DNS_API_TOKEN: $CF_DNS_API_TOKEN
+    command:
+      - --log=true
+      - --log.level=INFO
+      - --providers.docker.swarmMode=true
+      - --providers.swarm.endpoint=unix:///var/run/docker.sock
+      - --providers.swarm.useBindPortIP=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.swarm.network=public
+      - --providers.swarm.refreshSeconds=30
+      - --providers.swarm.httpClientTimeout=300
+      - --providers.swarm.watch=false
+      - --providers.swarm.tls.insecureSkipVerify=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.myresolver.acme.dnschallenge=true
+      - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.myresolver.acme.email=info@${DOMAIN}
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    networks:
+      - public
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - letsencrypt:/letsencrypt
+
+networks:
+  public:
+    name: public
+    attachable: true
+
+volumes:
+  letsencrypt:
+    driver: glusterfs
+    driver_opts:
+      volname: g0
