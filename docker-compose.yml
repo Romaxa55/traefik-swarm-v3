@@ -9,9 +9,7 @@ services:
       - --log=true
       - --log.level=INFO
       - --providers.docker.swarmMode=true
-      - --providers.swarm.endpoint=unix:///var/run/docker.sock
       - --providers.swarm.useBindPortIP=true
-      - --providers.docker.exposedbydefault=false
       - --providers.swarm.network=public
       - --providers.swarm.refreshSeconds=30
       - --providers.swarm.httpClientTimeout=300
