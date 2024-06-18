@@ -8,12 +8,11 @@ services:
     command:
       - --log=true
       - --log.level=INFO
-      - --providers.docker.swarmMode=true
       - --providers.swarm.useBindPortIP=true
       - --providers.swarm.network=public
       - --providers.swarm.refreshSeconds=30
       - --providers.swarm.httpClientTimeout=300
-      - --providers.swarm.watch=false
+      - --providers.swarm.watch=true
       - --providers.swarm.tls.insecureSkipVerify=true
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
