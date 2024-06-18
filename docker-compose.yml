@@ -47,3 +47,4 @@ networks:
 
 volumes:
   letsencrypt:
+    driver: local
