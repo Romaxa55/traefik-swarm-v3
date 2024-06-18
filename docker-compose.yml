@@ -48,5 +48,4 @@ networks:
 volumes:
   letsencrypt:
     driver: glusterfs
-    driver_opts:
-      volname: g0
+    name: "g0/letsencrypt"
