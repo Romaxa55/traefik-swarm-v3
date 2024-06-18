@@ -8,6 +8,7 @@ services:
     command:
       - --log=true
       - --log.level=INFO
+      - --providers.swarm.endpoint=unix:///var/run/docker.sock
       - --providers.swarm.useBindPortIP=true
       - --providers.swarm.network=public
       - --providers.swarm.refreshSeconds=30
