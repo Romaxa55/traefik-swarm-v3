@@ -14,7 +14,7 @@ services:
       - --providers.swarm.httpClientTimeout=300
       - --providers.swarm.exposedByDefault=false
       - --providers.swarm.useBindPortIP=true
-      - --providers.swarm.watch=false
+      - --providers.swarm.watch=true
       - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
       - --entryPoints.websecure.asDefault=true
