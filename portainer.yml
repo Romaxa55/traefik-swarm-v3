@@ -37,12 +37,22 @@ services:
         limits:
           memory: 1G
       labels:
-        - traefik.enable=true
-        - traefik.http.routers.portainer.tls=true
-        - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
-        - traefik.http.routers.portainer.entrypoints=websecure
-        - traefik.http.routers.portainer.tls.certresolver=myresolver
-        - traefik.http.services.portainer.loadbalancer.server.port=9000
+        # Dashboard
+        - 'traefik.enable=true'
+        # Change the host url here
+        - 'traefik.http.routers.portainer.rule=Host(`traefik.${DOMAIN}`)'
+        - 'traefik.http.routers.portainer.service=api@internal'
+        - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
+        - 'traefik.http.routers.portainer.tls.certresolver=myresolver'
+        - 'traefik.http.routers.portainer.entrypoints=websecure'
+
+        # global redirect to https
+        - 'traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)'
+        - 'traefik.http.routers.http-catchall.entrypoints=web'
+        - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
+
+        # middleware redirect
+        - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
 
 
 
