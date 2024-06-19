@@ -7,7 +7,7 @@ services:
       - .env
     command:
       - --log=true
-      - --log.level=INFO
+      - --log.level=DEBUG
       - --providers.swarm.endpoint=unix:///var/run/docker.sock
       - --providers.swarm.network=public
       - --providers.swarm.refreshSeconds=30
