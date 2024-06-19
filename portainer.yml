@@ -38,12 +38,12 @@ services:
           memory: 1G
       labels:
         - traefik.enable=true
-        - traefik.http.routers.web.tls=true
-        - traefik.http.routers.web.rule=Host(`portainer.${DOMAIN}`)
-        - traefik.http.routers.web.entrypoints=websecure
-        - traefik.http.routers.web.tls.certresolver=myresolver
-        - traefik.http.services.web.loadbalancer.server.port=9000
-        - traefik.http.routers.web.service=web
+        - traefik.http.routers.portainer.tls=true
+        - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
+        - traefik.http.routers.portainer.entrypoints=websecure
+        - traefik.http.routers.portainer.tls.certresolver=myresolver
+        - traefik.http.services.portainer.loadbalancer.server.port=9000
+        - traefik.http.routers.portainer.service=portainer
 
 
 networks:
