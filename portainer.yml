@@ -28,7 +28,6 @@ services:
       - public
       - agent_network
     deploy:
-#      mode: global
       replicas: 1
       endpoint_mode: dnsrr
       placement:
@@ -40,7 +39,7 @@ services:
       labels:
         - traefik.enable=true
         - traefik.http.routers.web.tls=true
-        - traefik.http.routers.web.rule=Host(`sentry.cashx.ng`)
+        - traefik.http.routers.web.rule=Host(`portainer.${DOMAIN}`)
         - traefik.http.routers.web.entrypoints=websecure
         - traefik.http.routers.web.tls.certresolver=myresolver
         - traefik.http.services.web.loadbalancer.server.port=9000
@@ -56,8 +55,4 @@ networks:
 
 volumes:
   portainer:
-    driver: glusterfs
-    driver_opts:
-      servers: localhost
-      volname: docker
-    name: volumes/portainer
+    driver: lcoal
