@@ -15,14 +15,17 @@ services:
       - --providers.swarm.exposedByDefault=false
       - --providers.swarm.useBindPortIP=true
       - --providers.swarm.watch=false
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
+      - --entryPoints.web.address=:80
+      - --entryPoints.websecure.address=:443
+      - --entryPoints.websecure.asDefault=true
       - --certificatesresolvers.myresolver.acme.dnschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.myresolver.acme.email=info@${DOMAIN}
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --api.insecure=true  # Включает доступ к админке без авторизации
+      - --api.dashboard=true  # Включает dashboard
     ports:
       - "80:80"
       - "443:443"
@@ -31,6 +34,12 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - /mnt/blockstorage/letsencrypt:/letsencrypt
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
+        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+        - "traefik.http.routers.traefik.entrypoints=web,websecure"
 
 networks:
   public:
