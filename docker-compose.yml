@@ -13,7 +13,7 @@ services:
       - --providers.swarm.refreshSeconds=30
       - --providers.swarm.httpClientTimeout=300
       - --providers.swarm.exposedByDefault=false
-      - --providers.swarm.watch=true
+      - --providers.swarm.watch=false
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       - --certificatesresolvers.myresolver.acme.dnschallenge=true
