@@ -36,12 +36,13 @@ services:
         limits:
           memory: 256Mb
       labels:
-        - 'traefik.enable=true'
-        - 'traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)'
-        - 'traefik.http.routers.portainer.service=api@internal'
-        - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
-        - 'traefik.http.routers.portainer.tls.certresolver=myresolver'
-        - 'traefik.http.routers.portainer.entrypoints=websecure'
+        - traefik.enable=true
+        - traefik.http.routers.portainer.tls=true
+        - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
+        - traefik.http.routers.portainer.entrypoints=websecure
+        - traefik.http.routers.portainer.tls.certresolver=myresolver
+        - traefik.http.services.portainer.loadbalancer.server.port=9000
+
 networks:
   public:
     external: true
