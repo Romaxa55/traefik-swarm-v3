@@ -40,7 +40,7 @@ services:
         # Dashboard
         - 'traefik.enable=true'
         # Change the host url here
-        - 'traefik.http.routers.portainer.rule=Host(`traefik.${DOMAIN}`)'
+        - 'traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)'
         - 'traefik.http.routers.portainer.service=api@internal'
         - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
         - 'traefik.http.routers.portainer.tls.certresolver=myresolver'
