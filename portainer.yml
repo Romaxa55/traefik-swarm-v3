@@ -30,6 +30,8 @@ services:
     deploy:
       replicas: 1
       endpoint_mode: dnsrr
+      placement:
+        constraints: [ node.platform.os == linux ]
       resources:
         limits:
           memory: 256Mb
