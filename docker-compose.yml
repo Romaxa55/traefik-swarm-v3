@@ -24,8 +24,8 @@ services:
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      - --api.insecure=true  # Включает доступ к админке без авторизации
-      - --api.dashboard=true  # Включает dashboard
+      - --api
+      - --api.dashboard=true
     ports:
       - "80:80"
       - "443:443"
@@ -36,10 +36,25 @@ services:
       - /mnt/blockstorage/letsencrypt:/letsencrypt
     deploy:
       labels:
-        - "traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
-        - "traefik.http.routers.dashboard.service=api@internal"
-        # Dummy service for Swarm port detection. The port can be any valid integer value.
-        - "traefik.http.services.dummy-svc.loadbalancer.server.port=8080"
+        # Dashboard
+        - 'traefik.enable=true'
+        # Change the host url here
+        - 'traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)'
+        - 'traefik.http.routers.traefik.service=api@internal'
+        - 'traefik.http.services.traefik.loadbalancer.server.port=8080'
+        - 'traefik.http.routers.traefik.tls.certresolver=myresolver'
+        - 'traefik.http.routers.traefik.entrypoints=websecure'
+        - 'traefik.http.routers.traefik.middlewares=authtraefik'
+        # Change the auth password here
+        - 'traefik.http.middlewares.authtraefik.basicauth.users=admin:yournewpassword' # user/password
+
+        # global redirect to https
+        - 'traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)'
+        - 'traefik.http.routers.http-catchall.entrypoints=web'
+        - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
+
+        # middleware redirect
+        - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
 
 networks:
   public:
