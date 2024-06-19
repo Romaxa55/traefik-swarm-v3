@@ -36,9 +36,7 @@ services:
         limits:
           memory: 256Mb
       labels:
-        # Dashboard
         - 'traefik.enable=true'
-        # Change the host url here
         - 'traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)'
         - 'traefik.http.routers.portainer.service=api@internal'
         - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
