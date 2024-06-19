@@ -3,8 +3,8 @@ version: '3.9'
 services:
   traefik:
     image: traefik:v3.0.3
-    env_file:
-      - .env
+    environment:
+      CF_DNS_API_TOKEN: $CF_DNS_API_TOKEN
     command:
       - --log=true
       - --log.level=DEBUG
