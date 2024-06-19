@@ -44,9 +44,6 @@ services:
         - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
         - 'traefik.http.routers.portainer.tls.certresolver=myresolver'
         - 'traefik.http.routers.portainer.entrypoints=websecure'
-
-
-
 networks:
   public:
     external: true
