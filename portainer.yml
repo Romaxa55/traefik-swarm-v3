@@ -28,7 +28,6 @@ services:
       - public
     deploy:
       replicas: 1
-      endpoint_mode: dnsrr
       placement:
         constraints: [ node.platform.os == linux ]
       resources:
