@@ -26,7 +26,6 @@ services:
       - portainer:/data
     networks:
       - public
-      - agent_network
     deploy:
       replicas: 1
       endpoint_mode: dnsrr
@@ -46,9 +45,6 @@ services:
 networks:
   public:
     external: true
-  agent_network:
-    driver: overlay
-    attachable: true
 
 volumes:
   portainer:
