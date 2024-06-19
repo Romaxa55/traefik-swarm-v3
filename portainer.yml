@@ -56,4 +56,4 @@ networks:
 
 volumes:
   portainer:
-    driver: lcoal
+    driver: local
