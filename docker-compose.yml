@@ -36,10 +36,10 @@ services:
       - /mnt/blockstorage/letsencrypt:/letsencrypt
     deploy:
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
-        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-        - "traefik.http.routers.traefik.entrypoints=web,websecure"
+        - "traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+        - "traefik.http.routers.dashboard.service=api@internal"
+        # Dummy service for Swarm port detection. The port can be any valid integer value.
+        - "traefik.http.services.dummy-svc.loadbalancer.server.port=8080"
 
 networks:
   public:
