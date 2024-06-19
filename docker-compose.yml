@@ -26,8 +26,6 @@ services:
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --api
       - --api.dashboard=true
-      - --experimental.plugins.cloudflareip.modulename=github.com/vincentinttsh/cloudflareip
-      - --experimental.plugins.cloudflareip.version=v1.0.0
     ports:
       - "80:80"
       - "443:443"
