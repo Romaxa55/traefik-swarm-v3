@@ -27,6 +27,8 @@ services:
     networks:
       - public
       - agent_network
+    env_file:
+      - .env
     deploy:
       replicas: 1
       endpoint_mode: dnsrr
