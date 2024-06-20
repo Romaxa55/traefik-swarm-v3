@@ -15,15 +15,12 @@ services:
       - --providers.swarm.exposedByDefault=false
       - --providers.swarm.useBindPortIP=true
       - --providers.swarm.watch=true
-      - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
       - --entryPoints.websecure.asDefault=true
       - --certificatesresolvers.myresolver.acme.dnschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.myresolver.acme.email=info@${DOMAIN}
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-      - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --api
       - --api.dashboard=true
     ports:
@@ -46,14 +43,6 @@ services:
         - 'traefik.http.routers.traefik.middlewares=authtraefik'
         # Change the auth password here
         - 'traefik.http.middlewares.authtraefik.basicauth.users=romaxa55:$$apr1$$xk8zTNOu$$DJcneLdsCg1Y1s.Ke6MQa/' # user/password
-
-        # global redirect to https
-        - 'traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)'
-        - 'traefik.http.routers.http-catchall.entrypoints=web'
-        - 'traefik.http.routers.http-catchall.middlewares=redirect-to-https'
-
-        # middleware redirect
-        - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
 
 networks:
   public:
