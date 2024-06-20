@@ -27,7 +27,6 @@ services:
       - --api
       - --api.dashboard=true
     ports:
-      - "80:80"
       - "443:443"
     networks:
       - public
